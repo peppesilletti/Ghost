@@ -125,6 +125,15 @@ class PostsService {
 
         return cacheInvalidate;
     }
+
+    /**
+     * Get post's html
+     */
+    async getPostHtmlById({id = ''} = {}) {
+        const model = await this.models.Post.findOne({id});
+
+        return model.get('html');
+    }
 }
 
 /**

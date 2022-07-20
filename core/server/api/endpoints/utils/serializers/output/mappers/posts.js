@@ -9,10 +9,12 @@ const date = require('../utils/date');
 const extraAttrs = require('../utils/extra-attrs');
 const gating = require('../utils/post-gating');
 const url = require('../utils/url');
+const readingMinutes = require('@tryghost/helpers').utils.readingMinutes;
 
 const utils = require('../../../index');
 
-const postsMetaSchema = require('../../../../../../data/schema').tables.posts_meta;
+const postsMetaSchema = require('../../../../../../data/schema').tables
+    .posts_meta;
 
 const getPostServiceInstance = require('../../../../../../services/posts/posts-service');
 const postsService = getPostServiceInstance();
@@ -33,18 +35,48 @@ module.exports = async (model, frame, options = {}) => {
 
     extraAttrs.forPost(frame, model, jsonModel);
 
+    // Attach reading_time
+    if (frame.options?.columns?.includes('reading_time')) {
+        let additionalImages = 0;
+
+        if (jsonModel.feature_image) {
+            additionalImages += 1;
+        }
+
+        if (jsonModel.html) {
+            jsonModel.reading_time = readingMinutes(
+                jsonModel.html,
+                additionalImages
+            );
+        } else {
+            const html = await postsService.getPostHtmlById({id: model.id});
+            jsonModel.reading_time = readingMinutes(html, additionalImages);
+        }
+    }
+
     // Attach tiers to custom nql visibility filter
     if (jsonModel.visibility) {
-        if (['members', 'public'].includes(jsonModel.visibility) && jsonModel.tiers) {
+        if (
+            ['members', 'public'].includes(jsonModel.visibility) &&
+            jsonModel.tiers
+        ) {
             jsonModel.tiers = tiersData || [];
         }
 
         if (jsonModel.visibility === 'paid' && jsonModel.tiers) {
-            jsonModel.tiers = tiersData ? tiersData.filter(t => t.type === 'paid') : [];
+            jsonModel.tiers = tiersData
+                ? tiersData.filter(t => t.type === 'paid')
+                : [];
         }
 
-        if (!['members', 'public', 'paid', 'tiers'].includes(jsonModel.visibility)) {
-            const tiers = await postsService.getProductsFromVisibilityFilter(jsonModel.visibility);
+        if (
+            !['members', 'public', 'paid', 'tiers'].includes(
+                jsonModel.visibility
+            )
+        ) {
+            const tiers = await postsService.getProductsFromVisibilityFilter(
+                jsonModel.visibility
+            );
 
             jsonModel.visibility = 'tiers';
             jsonModel.tiers = tiers;
@@ -58,15 +90,20 @@ module.exports = async (model, frame, options = {}) => {
 
     // Transforms post/page metadata to flat structure
     let metaAttrs = _.keys(_.omit(postsMetaSchema, ['id', 'post_id']));
-    _(metaAttrs).filter((k) => {
-        return (!frame.options.columns || (frame.options.columns && frame.options.columns.includes(k)));
-    }).each((attr) => {
-        // NOTE: the default of `email_only` is `false` which is why we default to `false` instead of `null`
-        //       The undefined value is possible because `posts_meta` table is lazily created only one of the
-        //       values is assigned.
-        const defaultValue = (attr === 'email_only') ? false : null;
-        jsonModel[attr] = _.get(jsonModel.posts_meta, attr) || defaultValue;
-    });
+    _(metaAttrs)
+        .filter((k) => {
+            return (
+                !frame.options.columns ||
+                (frame.options.columns && frame.options.columns.includes(k))
+            );
+        })
+        .each((attr) => {
+            // NOTE: the default of `email_only` is `false` which is why we default to `false` instead of `null`
+            //       The undefined value is possible because `posts_meta` table is lazily created only one of the
+            //       values is assigned.
+            const defaultValue = attr === 'email_only' ? false : null;
+            jsonModel[attr] = _.get(jsonModel.posts_meta, attr) || defaultValue;
+        });
     delete jsonModel.posts_meta;
 
     clean.post(jsonModel, frame);
@@ -77,11 +114,13 @@ module.exports = async (model, frame, options = {}) => {
             // are being passed by reference in tags/authors. Might be refactored into more explicit call
             // in the future, but is good enough for current use-case
             if (relation === 'tags' && jsonModel.tags) {
-                jsonModel.tags = jsonModel.tags.map(tag => mapTag(tag, frame));
+                jsonModel.tags = jsonModel.tags.map(tag => mapTag(tag, frame)
+                );
             }
 
             if (relation === 'authors' && jsonModel.authors) {
-                jsonModel.authors = jsonModel.authors.map(author => mapUser(author, frame));
+                jsonModel.authors = jsonModel.authors.map(author => mapUser(author, frame)
+                );
             }
 
             if (relation === 'email' && jsonModel.email) {

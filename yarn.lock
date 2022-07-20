@@ -2331,10 +2331,10 @@
     "@tryghost/root-utils" "^0.3.15"
     semver "^7.3.5"
 
-"@tryghost/vhost-middleware@1.0.26":
-  version "1.0.26"
-  resolved "https://registry.yarnpkg.com/@tryghost/vhost-middleware/-/vhost-middleware-1.0.26.tgz#8e5fc668f47d3960af6295bf4275a37e7c4fc4e1"
-  integrity sha512-7IYYeRLIzWS/Wl3PLSVDTpk08AB9SZbulh67buXdzjWXZCkFtWPPMB4BS3fCUuJCFDOfz6f92rfMkMu7Xji/TA==
+"@tryghost/vhost-middleware@1.0.27":
+  version "1.0.27"
+  resolved "https://registry.yarnpkg.com/@tryghost/vhost-middleware/-/vhost-middleware-1.0.27.tgz#c00f455a79a3272e7edc0bebbcbc91f7c742b3bf"
+  integrity sha512-vosOAg+G+URCH1qiA8UEiCGR1qhxl6xjHn5qlPQlP4BZXOtJRPL83/ppUjqFTSGqAFnN+sq4oPabIIAlvY22gg==
 
 "@tryghost/webhook-mock-receiver@0.1.1":
   version "0.1.1"

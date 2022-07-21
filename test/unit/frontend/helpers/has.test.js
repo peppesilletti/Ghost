@@ -163,6 +163,16 @@ describe('{{#has}} helper', function () {
             fn.called.should.be.true();
             inverse.called.should.be.false();
         });
+
+        it('startsWith:prefix', function () {
+            thisCtx = {tags: [{name: 'prefix-foo'}, {name: 'bar'}]};
+
+            // {{#has tag="startsWith:prefix"}}
+            callHasHelper(thisCtx, {tag: 'startsWith:prefix'});
+
+            fn.called.should.be.true();
+            inverse.called.should.be.false();
+        });
     });
 
     describe('author match', function () {

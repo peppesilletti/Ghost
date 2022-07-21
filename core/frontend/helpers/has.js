@@ -33,6 +33,16 @@ function handleCount(ctxAttr, data) {
     return false;
 }
 
+function hasTagStartingWith(ctxAttr, tags) {
+    const prefix = ctxAttr.split(':')[1];
+
+    if (!prefix) {
+        return false;
+    }
+
+    return _.some(tags, tag => tag.name.startsWith(prefix.trim()));
+}
+
 function evaluateTagList(expr, tags) {
     return expr.split(',').map(function (v) {
         return v.trim();
@@ -53,6 +63,10 @@ function handleTag(data, attrs) {
 
     if (attrs.tag.match(/count:/)) {
         return handleCount(attrs.tag, data.tags);
+    }
+
+    if (attrs.tag.match(/startsWith:/)) {
+        return hasTagStartingWith(attrs.tag, data.tags);
     }
 
     return evaluateTagList(attrs.tag, _.map(data.tags, 'name')) || false;

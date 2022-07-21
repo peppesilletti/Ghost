@@ -3351,6 +3351,83 @@ Object {
 }
 `;
 
+exports[`Posts Content API Can return reading_time without using the html 1: [body] 1`] = `
+Object {
+  "meta": Object {
+    "pagination": Object {
+      "limit": 15,
+      "next": null,
+      "page": 1,
+      "pages": 1,
+      "prev": null,
+      "total": 15,
+    },
+  },
+  "posts": Array [
+    Object {
+      "reading_time": 0,
+      "title": "title",
+    },
+    Object {
+      "reading_time": 0,
+      "title": "title",
+    },
+    Object {
+      "reading_time": 0,
+      "title": "title",
+    },
+    Object {
+      "reading_time": 0,
+      "title": "title",
+    },
+    Object {
+      "reading_time": 2,
+      "title": "Start here for a quick overview of everything you need to know",
+    },
+    Object {
+      "reading_time": 3,
+      "title": "Customizing your brand and design settings",
+    },
+    Object {
+      "reading_time": 5,
+      "title": "Writing and managing content in Ghost, an advanced guide",
+    },
+    Object {
+      "reading_time": 2,
+      "title": "Building your audience with subscriber signups",
+    },
+    Object {
+      "reading_time": 1,
+      "title": "Selling premium memberships with recurring revenue",
+    },
+    Object {
+      "reading_time": 1,
+      "title": "How to grow your business around an audience",
+    },
+    Object {
+      "reading_time": 1,
+      "title": "Setting up apps and custom integrations",
+    },
+    Object {
+      "reading_time": 1,
+      "title": "Not so short, bit complex",
+    },
+    Object {
+      "reading_time": 0,
+      "title": "Short and Sweet",
+    },
+    Object {
+      "reading_time": 1,
+      "title": "Ghostly Kitchen Sink",
+    },
+    Object {
+      "reading_time": 1,
+      "title": "HTML Ipsum",
+    },
+  ],
+}
+`;
+
 exports[`Posts Content API Can use post excerpt as field 1: [body] 1`] = `
 Object {
   "meta": Object {

@@ -323,4 +323,11 @@ describe('Posts Content API', function () {
             .expectStatus(200)
             .matchBodySnapshot();
     });
+
+    it('Can return reading_time without using the html', async function () {
+        await agent
+            .get(`posts/?fields=title,reading_time`)
+            .expectStatus(200)
+            .matchBodySnapshot();
+    });
 });

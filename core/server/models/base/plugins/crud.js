@@ -17,6 +17,12 @@ const requiredForExcerpt = (requestedColumns) => {
     }
 };
 
+const requiredForReadingTime = (requestedColumns) => {
+    if (requestedColumns && requestedColumns.includes('reading_time') && !requestedColumns.includes('html')) {
+        requestedColumns.push('html');
+    }
+};
+
 /**
  * @param {Bookshelf} Bookshelf
  */
@@ -84,6 +90,9 @@ module.exports = function (Bookshelf) {
             const requestedColumns = options.columns;
             // make sure we include plaintext and custom_excerpt if excerpt is requested
             requiredForExcerpt(requestedColumns);
+
+            // make sure we include html if reading_time is and html is not requested
+            requiredForReadingTime(requestedColumns);
 
             // Set this to true or pass ?debug=true as an API option to get output
             itemCollection.debug = unfilteredOptions.debug && process.env.NODE_ENV !== 'production';

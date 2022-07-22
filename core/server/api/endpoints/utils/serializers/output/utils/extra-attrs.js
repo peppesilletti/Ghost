@@ -51,17 +51,20 @@ module.exports.forPost = (frame, model, attrs) => {
         }
     }
 
-    // reading_time still only works when used along with formats=html.
+    if (attrs.html) {
+        let additionalImages = 0;
 
-    if (!Object.prototype.hasOwnProperty.call(frame.options, 'columns') ||
-        (frame.options.columns.includes('reading_time'))) {
-        if (attrs.html) {
-            let additionalImages = 0;
+        if (attrs.feature_image) {
+            additionalImages += 1;
+        }
+        attrs.reading_time = readingMinutes(attrs.html, additionalImages);
 
-            if (attrs.feature_image) {
-                additionalImages += 1;
-            }
-            attrs.reading_time = readingMinutes(attrs.html, additionalImages);
+        if (frame.options.columns && frame.options.columns.includes('reading_time') && !frame.options.columns.includes('html')) {
+            delete attrs.html;
+        }
+
+        if (frame.options.columns && !frame.options.columns.includes('reading_time') && frame.options.columns.includes('html')) {
+            delete attrs.reading_time;
         }
     }
 };
